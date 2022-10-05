@@ -13,37 +13,52 @@ namespace _4AssignmentREST.Managers.Tests
     [TestClass()]
     public class FootballPlayersManagerTests
     {
+        FootballPlayersManager manager = new FootballPlayersManager();
+
         [TestMethod()]
         public void GetAllTest()
         {
-            var manager = new FootballPlayersManager();
             List<FootballPlayer> testList = manager.GetAll();
 
-            Assert.AreEqual(testList.Count, 5);
+            Assert.AreEqual(5, testList.Count);
         }
 
         [TestMethod()]
         public void AddTest()
         {
-            var manager = new FootballPlayersManager();
             var newPlayer = new FootballPlayer() { Age = 25, Name = "Rudo", ShirtNumber = 25 };
 
             var createdResponse = manager.Add(newPlayer);
 
-            Assert.AreEqual(createdResponse.Id, 6);
-            Assert.AreEqual(createdResponse.Age, 25);
-            Assert.AreEqual(createdResponse.Name, "Rudo");
-            Assert.AreEqual(createdResponse.ShirtNumber, 25);
+            Assert.AreEqual(6, createdResponse.Id);
+            Assert.AreEqual(6, manager.GetAll().Count);
+        }
+
+        [TestMethod()]
+        public void GetById()
+        {
+            var createdResponse = manager.GetById(2);
+            var nullResponse = manager.GetById(25);
+
+            Assert.AreEqual("Pele", createdResponse?.Name);
+            Assert.IsNull(nullResponse);
         }
 
         [TestMethod()]
         public void UpdateTest()
         {
-            var manager = new FootballPlayersManager();
             var updates = new FootballPlayer() { Age = 25, Name = "Rudo", ShirtNumber = 25 };
-
             var createdResponse = manager.Update(2, updates);
-            Assert.AreEqual(createdResponse.Name, updates.Name);
+
+            Assert.AreEqual("Rudo", createdResponse?.Name);
+        }
+
+        [TestMethod()]
+        public void DeleteTest()
+        {
+            var createdResponse = manager.Delete(1);
+            
+            Assert.IsNull(manager.GetById(1));
         }
     }
 }
